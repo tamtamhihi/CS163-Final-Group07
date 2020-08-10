@@ -21,6 +21,9 @@
     <ClInclude Include="Indexing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SearchOperator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Indexing.cpp">
@@ -28,6 +31,9 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchOperator.cpp">
+      <Filter>Source Files\Preprocess</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

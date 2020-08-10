@@ -139,10 +139,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Indexing.h" />
+    <ClInclude Include="SearchOperator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Indexing.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="SearchOperator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

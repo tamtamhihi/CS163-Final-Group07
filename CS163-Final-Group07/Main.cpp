@@ -1,6 +1,6 @@
 #include "Indexing.h"
-
+#include "SearchOperator.h"
 int main() {
-	indexing(100);
+	search();
 	return 0;
 }
