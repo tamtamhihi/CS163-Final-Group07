@@ -16,12 +16,24 @@
     <Filter Include="Source Files\Preprocess">
       <UniqueIdentifier>{a1642560-9d9c-44d2-9ed7-3be7516245c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\SearchOperator">
+      <UniqueIdentifier>{73b471ea-6aa1-443f-86e3-c9250a0fa63b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Indexing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SearchOperator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiscProcessing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RankFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,8 +44,17 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SearchOperator.cpp">
+    <ClCompile Include="MiscProcessing.cpp">
       <Filter>Source Files\Preprocess</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchOperator.cpp">
+      <Filter>Source Files\SearchOperator</Filter>
+    </ClCompile>
+    <ClCompile Include="RankFunction.cpp">
+      <Filter>Source Files\SearchOperator</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchResult.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

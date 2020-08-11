@@ -139,12 +139,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Indexing.h" />
+    <ClInclude Include="MiscProcessing.h" />
+    <ClInclude Include="RankFunction.h" />
     <ClInclude Include="SearchOperator.h" />
+    <ClInclude Include="SearchResult.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Indexing.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MiscProcessing.cpp" />
+    <ClCompile Include="RankFunction.cpp" />
     <ClCompile Include="SearchOperator.cpp" />
+    <ClCompile Include="SearchResult.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

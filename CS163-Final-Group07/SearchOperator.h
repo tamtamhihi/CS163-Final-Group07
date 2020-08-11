@@ -5,9 +5,7 @@
 
 void search();
 
-void retrieve(Node*& root);
-
-bool operatorAnd(Node* root, string word);
+void operatorAnd(Node*& root, string& query);
 
 
 
