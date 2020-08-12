@@ -36,6 +36,9 @@
     <ClInclude Include="SearchResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Indexing.cpp">
@@ -54,6 +57,9 @@
       <Filter>Source Files\SearchOperator</Filter>
     </ClCompile>
     <ClCompile Include="SearchResult.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

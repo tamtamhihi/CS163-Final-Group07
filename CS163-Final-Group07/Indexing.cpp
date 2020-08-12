@@ -1,6 +1,5 @@
 #include "Indexing.h"
 
-
 // This function opens document and read in all words to add to index file.
 void inspectDocument(Node*& root, string& documentPath, int& documentNum, Node*& stopwordRoot) {
 	// Open corresponding file.
@@ -99,7 +98,7 @@ void retrieve(Node*& root) {
 	ifstream in(INDEX_FILE);
 	if (!in)
 		return;
-	cout << "Retrieving index...\n";
+	cout << "\t\t\t\t\tRetrieving index...\n";
 
 	string line, token;
 	vector<int> documents;
@@ -118,6 +117,6 @@ void retrieve(Node*& root) {
 		// Add word to root.
 		addWordWithDocumentList(token, root, documents);
 	}
-	cout << "Finish retrieving index...\n\n";
+	cout << "\t\t\t\tFinish retrieving index...\n\n";
 	in.close();
 }

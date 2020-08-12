@@ -1,15 +1,47 @@
 #include "SearchOperator.h"
 #include "RankFunction.h"
 #include "SearchResult.h"
+#include "gui.h"
 
 void search() {
+	setTextColor(LIGHTBLUE);
 	Node* root = newNode();
 	retrieve(root);
-	string query;
-	cout << "Search File: ";
-	getline(cin, query);
-	operatorAnd(root, query);
+	string query = "";
+	system("cls");
+	drawTitle();
+	drawSearchBox();
+	getQuery(query);
+	while (query != "exit") {
+		operatorAnd(root, query);
+		cin.get();
+		system("cls");
+		drawTitle();
+		drawSearchBox();
+		query.clear();
+		getQuery(query);
+	}
 	deleteTrie(root);
+}
+
+void getQuery(string& query) {
+	char c = cin.get();
+	while (c != '\n') { // c != '\n'
+		if (c == 8) { // c == backspace
+			if (!query.empty()) {
+				query.pop_back();
+				cout << "\b \b";
+			}
+			c = cin.get();
+			continue;
+		}
+		query += c;
+		c = cin.get();
+	}
+	COORD searchResult;
+	searchResult.X = 0;
+	searchResult.Y = 15;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), searchResult);
 }
 
 void operatorAnd(Node*& root, string& query) {
