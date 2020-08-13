@@ -28,8 +28,8 @@ vector<int> orRanking(vector<vector<int>>& allDocuments) {
 	return result;
 }
 
-bool findDoc(vector<int> word, int doc) {
-	for (auto& document : word) {
+bool findDoc(vector<int> documentList, int doc) {
+	for (auto& document : documentList) {
 		if (document == doc)
 			return true;
 	}
@@ -37,16 +37,28 @@ bool findDoc(vector<int> word, int doc) {
 }
 
 vector<int> andRanking(vector<vector<int>>& allDocuments) {
+	if (allDocuments.size() == 0) return vector<int>();
+
+	// if there is just 1 keyword => return all documents that contain it
+	if (allDocuments.size() == 1)
+		return allDocuments[0];
+
 	vector<int> countDocuments;
-	vector<bool> present(allDocuments[0].size(), true);
 	int totalDocuments = 0;
 
+	// loop through all the documents index that contain first keyword
 	for (int i = 0; i < allDocuments[0].size(); ++i) {
-		
+		// for each document index
+		// check if other keywords is in that document
+		// by looping through other lists of words
 		for (int j = 1; j < allDocuments.size(); ++j) {
+			// if we don't find the current keyword is in the document
+			// which means we don't add this document index
 			if (!findDoc(allDocuments[j], allDocuments[0][i])) {
 				break;
 			}
+			// if all keywords present in the current document
+			// add it to countDocuments
 			if (j == allDocuments.size() - 1)
 				countDocuments.push_back(allDocuments[0][i]),
 				totalDocuments++;

@@ -92,6 +92,10 @@ void getQuery(string& query) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), searchResult);
 }
 
+void stringlower(string& word) {
+	for (auto& c : word)
+		c = tolower(c);
+}
 // This function will split query into words
 // return a list of keywords in query
 // and also change operator to the correct type
