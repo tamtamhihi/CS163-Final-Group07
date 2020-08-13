@@ -10,7 +10,7 @@ void inspectDocument(Node*& root, string& documentPath, int& documentNum, Node*&
 	// Read in word by word until EOF.
 	while (in >> word) {
 		// Extract the word and determine if the word should be added.
-		if (!extractWord(word) && isStopword(stopwordRoot, word))
+		if (!extractWord(word) || isStopword(stopwordRoot, word))
 			continue;
 		addWordWithDocumentNum(word, root, documentNum);
 	}
@@ -22,8 +22,6 @@ void addWordWithDocumentNum(string& word, Node*& root, int& documentNum) {
 	Node* addedWord = addWordReturnFinal(word, root);
 	// currentNode now points at the final node.
 	addedWord->isWord = true;
-	int index = lower_bound(addedWord->documentList.begin(), addedWord->documentList.end(), documentNum) 
-		-  addedWord->documentList.begin();
 	if (!addedWord->documentList.empty() && addedWord->documentList.back() == documentNum)
 		return;
 	addedWord->documentList.push_back(documentNum);
@@ -66,7 +64,6 @@ void indexing() {
 	// Create a root node for stopwords.
 	Node* stopwordRoot = newNode();
 	loadStopwords(stopwordRoot);
-
 	ifstream allDocuments(DOCUMENT_PREFIX + "___index.txt");
 	if (allDocuments) {
 		string documentPath;
