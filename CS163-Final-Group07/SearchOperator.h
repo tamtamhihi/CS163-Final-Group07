@@ -7,8 +7,10 @@
 
 void search();
 void getQuery(string& query);
+void stringlower(string& word);
+void filter(vector<string>& words, string& query, int& oper);
 void operatorOr(Node*& root, vector<vector<int>> allDocumentLists, vector<string> tokens);
 void operatorAnd(Node*& root, vector<vector<int>> allDocumentLists, vector<string> tokens);
-void filter(vector<string>& words, string& query, int& oper);
+void negateOperator(Node*& root, vector<vector<int>> allDocumentLists, vector<string> tokens);
 
 #endif

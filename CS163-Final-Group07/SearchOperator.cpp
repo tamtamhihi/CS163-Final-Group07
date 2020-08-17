@@ -35,6 +35,7 @@ void search() {
 	while (query != "exit") {
 
 		// get a list of keywords in query and get correct operator
+		// this function assume users just input 2 words
 		filter(words, query, oper);
 
 		// A list of all document lists containing each word in query.
@@ -55,6 +56,9 @@ void search() {
 		switch (oper) {
 		case 1:
 			operatorOr(root, allDocumentLists, tokens);
+			break;
+		case 2:
+			negateOperator(root, allDocumentLists, tokens);
 			break;
 		default:
 			operatorAnd(root, allDocumentLists, tokens);
@@ -113,7 +117,11 @@ void filter(vector<string>& words, string& query, int& oper) {
 		stringlower(word);
 		if (word == "or")
 			oper = 1;
-
+		else if (word[0] == '-') {
+			oper = 2;
+			words.push_back(word.substr(1, word.size() - 1));
+			continue;
+		}
 		// words keep query keywords
 		words.push_back(word);
 	}
@@ -121,7 +129,7 @@ void filter(vector<string>& words, string& query, int& oper) {
 
 
 void operatorOr(Node*& root, vector<vector<int>> allDocumentLists, vector<string> tokens) {
-	vector<int> searchResult = orRanking(allDocumentLists);
+	vector<int> searchResult = orRanking_v2(allDocumentLists);
 	cout << "Top " << searchResult.size() << " results:\n\n";
 	for (int document : searchResult) {
 		displayResult(document, tokens);
@@ -130,6 +138,14 @@ void operatorOr(Node*& root, vector<vector<int>> allDocumentLists, vector<string
 
 void operatorAnd(Node*& root, vector<vector<int>> allDocumentLists, vector<string> tokens) {
 	vector<int> searchResult = andRanking(allDocumentLists);
+	cout << "Top " << searchResult.size() << " results:\n\n";
+	for (int document : searchResult) {
+		displayResult(document, tokens);
+	}
+}
+
+void negateOperator(Node*& root, vector<vector<int>> allDocumentLists, vector<string> tokens) {
+	vector<int> searchResult = negateRanking(allDocumentLists);
 	cout << "Top " << searchResult.size() << " results:\n\n";
 	for (int document : searchResult) {
 		displayResult(document, tokens);
