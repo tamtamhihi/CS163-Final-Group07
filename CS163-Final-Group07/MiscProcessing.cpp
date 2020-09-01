@@ -3,8 +3,14 @@
 // This function returns a new node.
 Node* newNode() {
 	Node* node = new Node;
-	node->isWord = false;
+	node->isWord = -1;
 	return node;
+}
+
+void moveCurrentNode(Node*& currentNode, char& c) {
+	if (currentNode->child.find(int(c)) == currentNode->child.end())
+		currentNode->child[int(c)] = newNode();
+	currentNode = currentNode->child[int(c)];
 }
 
 // This function adds a word to trie of index and return the node of the final character.
@@ -51,20 +57,24 @@ bool extractWord(string& word) {
 	for (int i = 0; i < s; ++i) {
 		c = word[i];
 		// Skipping abnormal charaters.
-		if (c < 0 || c > 255)
+		if (c == ' ' || c < 0 || c > 255)
 			continue;
 		keepChar = true;
 		// The first character of extracted word should be
 		// either an alpha, a digit, a '#' or a money char.
 		if (extractedWord == "")
-			keepChar = (c == 35) || isalnum(c) || c == 36;
+			keepChar = (c == 35) || isalnum(c) || (c == 36);
 		// Ignore the ',' in words like 19,000.
 		if (c == ',' && extractedWord != "" && i < s - 1 && isDigit(extractedWord.back()) && isDigit(word[i + 1]))
 			keepChar = false;
-		if (keepChar)
-			extractedWord += tolower(c);
+		if (keepChar) {
+			if (isalpha(c))
+				extractedWord += tolower(c);
+			else
+				extractedWord += c;
+		}
 	}
-	while (!extractedWord.empty() && !isalnum(extractedWord.back()))
+	while (!extractedWord.empty() && !isalnum(extractedWord.back()) && c != '+')
 		extractedWord.pop_back();
 	word = extractedWord;
 	return !word.empty();
@@ -77,7 +87,7 @@ void loadStopwords(Node*& stopwordRoot) {
 		string word;
 		while (in >> word) {
 			Node* addedWord = addWordReturnFinal(word, stopwordRoot);
-			addedWord->isWord = true;
+			addedWord->isWord = 1;
 		}
 		in.close();
 	}
@@ -95,7 +105,7 @@ bool isStopword(Node*& stopwordRoot, string& word) {
 	}
 	// currentNode now points to the final character's node.
 	// If this is the end of a word, then the given word is a stopword.
-	return currentNode->isWord;
+	return (currentNode->isWord != -1);
 }
 
 // This function finds a word from index trie and returns
@@ -111,13 +121,27 @@ vector<int> findDocumentList(Node*& root, string& word) {
 			return documentList;
 		currentNode = currentNode->child[ascciMark];
 	}
-	if (currentNode->isWord)
+	if (currentNode->isWord != -1)
 		return currentNode->documentList;
 	return documentList;
+}
+
+// This function finds if a document num exists in a document list.
+bool isDocumentInList(vector<int>& documentList, int documentNum) {
+	int index = lower_bound(documentList.begin(), documentList.end(), documentNum) - documentList.begin();
+	if (index >= 0 && index < documentList.size() && documentList[index] == documentNum)
+		return true;
+	return false;
 }
 
 // This bool function is used to be a callback to sort the list of documents
 // in decreasing order of different words it contains.
 bool sortDecreasingSecondElement(const pair<int, int>& a, const pair<int, int>& b) {
 	return a.second > b.second;
+}
+
+// This function lowers all characters in a string.
+void stringlower(string& word) {
+	for (auto& c : word)
+		c = tolower(c);
 }

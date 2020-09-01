@@ -139,19 +139,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="gui.h" />
+    <ClInclude Include="History.h" />
     <ClInclude Include="Indexing.h" />
     <ClInclude Include="MiscProcessing.h" />
     <ClInclude Include="RankFunction.h" />
     <ClInclude Include="SearchOperator.h" />
+    <ClInclude Include="SearchProcess.h" />
     <ClInclude Include="SearchResult.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui.cpp" />
+    <ClCompile Include="History.cpp" />
     <ClCompile Include="Indexing.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MiscProcessing.cpp" />
     <ClCompile Include="RankFunction.cpp" />
     <ClCompile Include="SearchOperator.cpp" />
+    <ClCompile Include="SearchProcess.cpp" />
     <ClCompile Include="SearchResult.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

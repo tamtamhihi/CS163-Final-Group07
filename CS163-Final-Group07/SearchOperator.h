@@ -1,16 +1,15 @@
 #ifndef _SEARCHOPERATOR_H_
 #define _SEARCHOPERATOR_H_
 
-#include "gui.h"
-#include "Indexing.h"
-#include <conio.h>
+#include "RankFunction.h"
+#include "SearchResult.h"
 
-void search();
-void getQuery(string& query);
-void stringlower(string& word);
-void filter(vector<string>& words, string& query, int& oper);
-void operatorOr(Node*& root, vector<vector<int>> allDocumentLists, vector<string> tokens);
-void operatorAnd(Node*& root, vector<vector<int>> allDocumentLists, vector<string> tokens);
-void negateOperator(Node*& root, vector<vector<int>> allDocumentLists, vector<string> tokens);
+#define AND 0
+#define OR 1
+#define NEGATE 2
+
+void orOperator(vector<vector<int>>& allDocumentLists, vector<string>& tokens);
+void andOperator(vector<vector<int>>& allDocumentLists, vector<string>& tokens);
+void negateOperator(vector<vector<int>>& allDocumentLists, vector<vector<int>>& negateDocumentLists, vector<string>& tokens);
 
 #endif

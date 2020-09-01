@@ -17,11 +17,30 @@ void inspectDocument(Node*& root, string& documentPath, int& documentNum, Node*&
 	in.close();
 }
 
+void inspectDocumentUnorderedMap(unordered_map<string, vector<int>>& root, string& documentPath, int& documentNum, Node*& stopwordRoot) {
+	// Open corresponding file.
+	ifstream in(DOCUMENT_PREFIX + documentPath);
+	if (!in)
+		return;
+	string word;
+	// Read in word by word until EOF.
+	while (in >> word) {
+		// Extract the word and determine if the word should be added.
+		if (!extractWord(word) || isStopword(stopwordRoot, word))
+			continue;
+		//addWordWithDocumentNum(word, root, documentNum);
+		if (!root[word].empty() && root[word].back() == documentNum)
+			continue;
+		root[word].push_back(documentNum);
+	}
+	in.close();
+}
+
 // This function traverse a new word and add this document number to the final node.
 void addWordWithDocumentNum(string& word, Node*& root, int& documentNum) {
 	Node* addedWord = addWordReturnFinal(word, root);
 	// currentNode now points at the final node.
-	addedWord->isWord = true;
+	addedWord->isWord = 1;
 	if (!addedWord->documentList.empty() && addedWord->documentList.back() == documentNum)
 		return;
 	addedWord->documentList.push_back(documentNum);
@@ -30,7 +49,7 @@ void addWordWithDocumentNum(string& word, Node*& root, int& documentNum) {
 // This function traverse the word and add to trie with the given document list.
 void addWordWithDocumentList(string& word, Node*& root, vector<int>& documentList) {
 	Node* addedWord = addWordReturnFinal(word, root);
-	addedWord->isWord = true;
+	addedWord->isWord = 1;
 	addedWord->documentList = documentList;
 }
 
@@ -39,7 +58,7 @@ void addWordWithDocumentList(string& word, Node*& root, vector<int>& documentLis
 void printIndexToFile(ofstream& indexFile, Node*& root, string& word) {
 	// If the current node is the final node of a word,
 	// print out that word together with document list.
-	if (root->isWord) {
+	if (root->isWord != -1) {
 		//cout << "Writing \"" << word << "\"...\n";
 		indexFile << word;
 		for (int documentNum : root->documentList)
@@ -54,6 +73,27 @@ void printIndexToFile(ofstream& indexFile, Node*& root, string& word) {
 		word += char(iterator->first);
 		printIndexToFile(indexFile, iterator->second, word);
 		word.pop_back();
+	}
+	// Mark that index file is sorted.
+	ofstream propsFile(PROPS_FILE);
+	if (propsFile) {
+		propsFile << "1\n";
+		propsFile.close();
+	}
+}
+
+void printIndexToFileUnorderedMap(ofstream& indexFile, unordered_map<string, vector<int>>& root) {
+	for (auto& word : root) {
+		indexFile << word.first;
+		for (int doc : word.second)
+			indexFile << " " << doc;
+		indexFile << "\n";
+	}
+	// Mark that index file is not sorted.
+	ofstream propsFile(PROPS_FILE);
+	if (propsFile) {
+		propsFile << "0\n";
+		propsFile.close();
 	}
 }
 
@@ -86,6 +126,33 @@ void indexing() {
 	}
 	// Delete trie from memory.
 	deleteTrie(root);
+	deleteTrie(stopwordRoot);
+}
+
+void indexingUnorderedMap() {
+	unordered_map<string, vector<int>> root;
+	Node* stopwordRoot = newNode();
+	loadStopwords(stopwordRoot);
+	ifstream allDocuments(DOCUMENT_PREFIX + "___index.txt");
+	if (allDocuments) {
+		string documentPath;
+		int documentCount = 0;
+		while (getline(allDocuments, documentPath)) {
+			documentCount++;
+			if (documentCount % 200 == 0)
+				cout << "Crawled " << documentCount << "docs...\n";
+			inspectDocumentUnorderedMap(root, documentPath, documentCount, stopwordRoot);
+		}
+		cout << "Finished crawling " << documentCount << " documents...\n";
+
+		// Add all words from trie to index file.
+		cout << "Adding index to file...\n\n";
+		string word = "";
+		ofstream indexFile(INDEX_FILE, ios::app);
+		printIndexToFileUnorderedMap(indexFile, root);
+		indexFile.close();
+		allDocuments.close();
+	}
 	deleteTrie(stopwordRoot);
 }
 

@@ -7,9 +7,9 @@
 using namespace std;
 
 #define MATCHED 100
-const int MAXIMUM_DISPLAYED_TOKEN = 5;
-const int MAXIMUM_DISPLAYED_WORDS = 60;
-const int MAXIMUM_FILE_WORDCOUNT = 8000;
+const int MAXIMUM_DISPLAYED_TOKEN = 10;
+const int MAXIMUM_DISPLAYED_WORDS = 70;
+const int MAXIMUM_FILE_WORDCOUNT = 10000;
 
 void displayResult(int& documentNum, vector<string>& tokens);
 

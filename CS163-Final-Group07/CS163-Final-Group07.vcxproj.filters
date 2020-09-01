@@ -19,6 +19,12 @@
     <Filter Include="Source Files\SearchOperator">
       <UniqueIdentifier>{73b471ea-6aa1-443f-86e3-c9250a0fa63b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\SearchBox">
+      <UniqueIdentifier>{db4088fb-40cf-49b4-a404-fc1cd7262750}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Display">
+      <UniqueIdentifier>{b880cdef-7325-4756-8feb-445da975cf84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Indexing.h">
@@ -39,6 +45,12 @@
     <ClInclude Include="gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SearchProcess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="History.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Indexing.cpp">
@@ -56,11 +68,17 @@
     <ClCompile Include="RankFunction.cpp">
       <Filter>Source Files\SearchOperator</Filter>
     </ClCompile>
-    <ClCompile Include="SearchResult.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gui.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchProcess.cpp">
+      <Filter>Source Files\SearchBox</Filter>
+    </ClCompile>
+    <ClCompile Include="History.cpp">
+      <Filter>Source Files\SearchBox</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchResult.cpp">
+      <Filter>Source Files\Display</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

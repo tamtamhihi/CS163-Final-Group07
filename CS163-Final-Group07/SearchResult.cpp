@@ -22,6 +22,7 @@ void displayResult(int& documentNum, vector<string>& tokens) {
 	int s = tokens.size(), matchedToken = 0;
 	vector<int> markedTokens(s, -1);
 	int* allMatched = new int[MAXIMUM_FILE_WORDCOUNT];
+	memset(allMatched, -1, MAXIMUM_FILE_WORDCOUNT);
 	int wordCount = 0;
 	while (in >> word) {
 		document.push_back(word);
