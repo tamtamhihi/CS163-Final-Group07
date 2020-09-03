@@ -32,5 +32,6 @@ vector<int> findDocumentList(Node*& root, string& word);
 bool isDocumentInList(vector<int>& documentList, int documentNum);
 bool sortDecreasingSecondElement(const pair<int, int>& a, const pair<int, int>& b);
 void stringlower(string& word);
+void stringupper(string& word);
 
 #endif // !_MISCPROCESSING_H_

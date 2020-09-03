@@ -8,7 +8,7 @@ void setTextColor(int color) {
 	color &= 0x000f;
 	wAttributes &= 0xfff0;
 	wAttributes |= color;
-	SetConsoleTextAttribute(hConsoleOutput, wAttributes);
+	SetConsoleTextAttribute(hConsoleOutput, color);
 }
 
 void setCursorPosition(int x, int y) {
@@ -78,40 +78,40 @@ void displayHistory(vector<string>& logs, int hightlighted) {
 	setTextColor(WHITE);
 	int l = logs.size();
 	string log;
+	setTextColor(LIGHTBLUE);
 	for (int i = 0; i < l; ++i) {
 		log = logs[i];
 		cout << "\t\t\t" << char(186);
-		if (i == hightlighted) {
+		setTextColor(WHITE);
+		if (i == hightlighted)
 			setTextColor(GREEN);
-			cout << log;
-			setTextColor(WHITE);
-		}
-		else
-			cout << log;
+		cout << log;
 		for (int i = 0; i < SEARCH_BOX_WIDTH - log.size(); ++i)
 			cout << " ";
+		setTextColor(LIGHTBLUE);
 		cout << char(186) << "\n";
 	}
 	cout << "\t\t\t"; cout << char(200);
 	for (int i = 0; i < SEARCH_BOX_WIDTH; ++i)
 		cout << char(205);
-	cout << char(188);
-	if (l < MAXIMUM_HISTORY_CAPACITY)
-		clearLog();
-	setTextColor(LIGHTBLUE);
+	cout << char(188) << "\n";
+	clearLog();
 }
 
 void clearLog() {
-	for (int j = 0; j < 8; ++j)
+	for (int j = 0; j < 7; ++j)
 		cout << "                              ";
-	cout << "\n";
-	for (int j = 0; j < 8; ++j)
+	cout << endl;
+	for (int j = 0; j < 7; ++j)
 		cout << "                              ";
-	cout << "\n";
-	for (int j = 0; j < 8; ++j)
+	cout << endl;
+	for (int j = 0; j < 7; ++j)
 		cout << "                              ";
-	cout << "\n";
-	for (int j = 0; j < 8; ++j)
+	cout << endl;
+	for (int j = 0; j < 7; ++j)
 		cout << "                              ";
-	cout << "\n";
+	cout << endl;
+	for (int j = 0; j < 7; ++j)
+		cout << "                              ";
+	cout << endl;
 }

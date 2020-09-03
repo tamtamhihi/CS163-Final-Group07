@@ -5,7 +5,8 @@
 #define WHITE     8
 #define YELLOW    174
 #define RED       108
-#define GREEN     186
+#define GREEN     10
+#define DARKGREEN 2
 #define GREY      119
 #define PURPLE    77
 

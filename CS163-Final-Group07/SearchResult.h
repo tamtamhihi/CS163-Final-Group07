@@ -1,7 +1,6 @@
 #ifndef _SEARCHRESULT_H_
 #define _SEARCHRESULT_H_
 
-#include <iostream>
 #include "gui.h"
 #include "MiscProcessing.h"
 using namespace std;

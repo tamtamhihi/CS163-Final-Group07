@@ -5,6 +5,7 @@
 #include "gui.h"
 #include <conio.h>
 
+#define ALPHA -32
 #define UP    72
 #define DOWN  80
 #define LEFT  75

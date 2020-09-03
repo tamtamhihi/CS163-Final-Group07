@@ -24,6 +24,8 @@ void displayResult(int& documentNum, vector<string>& tokens) {
 	int* allMatched = new int[MAXIMUM_FILE_WORDCOUNT];
 	memset(allMatched, -1, MAXIMUM_FILE_WORDCOUNT);
 	int wordCount = 0;
+	string title;
+	getline(in, title, '.');
 	while (in >> word) {
 		document.push_back(word);
 		// Ignore non-sense words.
@@ -45,11 +47,48 @@ void displayResult(int& documentNum, vector<string>& tokens) {
 		}
 		wordCount++;
 	}
+	cout << "\t";
+	setTextColor(DARKGREEN);
+	stringstream titleStream(title);
+	string temporaryWord;
+	int titleCount = 0, notReached = 1;
+	while (titleStream >> word) {
+		titleCount += word.size();
+		temporaryWord = word;
+		stringupper(temporaryWord);
+		stringlower(word);
+		if (!extractWord(word))
+			cout << temporaryWord << " ";
+		else {
+			int index = lower_bound(tokens.begin(), tokens.end(), word) - tokens.begin();
+			if (index < s && tokens[index] == word) {
+				setTextColor(GREEN);
+				cout << temporaryWord << " ";
+				setTextColor(DARKGREEN);
+			}
+			else
+				cout << temporaryWord << " ";
+		}
+		if (titleCount >= 60 && titleCount < 70) {
+			cout << "...\n\t";
+			notReached = 0;
+			break;
+		}
+	}
+	if (notReached)
+		cout << "\n\t";
+	setTextColor(GREY);
+	cout << DOCUMENT_PREFIX + documentPath << "\n\n\t";
 	int numOfDisplayedTokens = min(matchedToken, MAXIMUM_DISPLAYED_TOKEN);
+	if (!numOfDisplayedTokens) {
+		setTextColor(LIGHTBLUE);
+		cout << "\n\n\n\n";
+		delete[] allMatched;
+		in.close();
+		return;
+	}
 	int wordsDisplayedPerToken = MAXIMUM_DISPLAYED_WORDS / numOfDisplayedTokens;
 	int lineWordCount = 0;
-	cout << "\t";
-	setTextColor(GREY);
 	for (int i = 0; i < s; ++i) {
 		if (markedTokens[i] != -1) {
 			int index = markedTokens[i];
@@ -81,7 +120,7 @@ void displayResult(int& documentNum, vector<string>& tokens) {
 		}
 	}
 	setTextColor(LIGHTBLUE);
-	cout << "\n\n\n";
+	cout << "\n\n\n\n";
 	delete[] allMatched;
 	in.close();
 }

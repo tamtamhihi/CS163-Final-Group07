@@ -133,10 +133,8 @@ void getQuery(string& query, Node*& history, vector<string>& logs) {
 	Node* current = history;
 	vector<string> logResults;
 	int suggestionPos = -1, cursorPos = 0;
-	while (c != 13) { // c != '\n'
-		if (int(c) == 0 || int(c) == 0xE0) {
-			cout << "^";
-			cursorPos++;
+	while (c != 13) {
+		if (int(c) == ALPHA) {
 			c = _getch();
 			if (int(c) == LEFT && cursorPos > 0) {
 				cout << "\b";
@@ -150,72 +148,128 @@ void getQuery(string& query, Node*& history, vector<string>& logs) {
 				suggestionPos--;
 				if (suggestionPos == -1) {
 					displayHistory(logResults);
-					setCursorToInputPosition(query.size());
 				}
 				else {
 					displayHistory(logResults, suggestionPos);
-					setTextToSearchBox(logs[suggestionPos]);
+					setTextToSearchBox(logResults[suggestionPos]);
+					for (int d = query.size(); d < logResults[suggestionPos].size(); ++d)
+						moveCurrentNode(current, logResults[suggestionPos][d]);
+					query = logResults[suggestionPos];
+					cursorPos = query.size();
 				}
+				setCursorToInputPosition(query.size());
 			}
-			else if (int(c) == DOWN && suggestionPos < MAXIMUM_HISTORY_CAPACITY) {
+			else if (int(c) == DOWN && !logResults.empty() && suggestionPos < MAXIMUM_HISTORY_CAPACITY - 1) {
 				suggestionPos++;
 				displayHistory(logResults, suggestionPos);
+				setTextToSearchBox(logResults[suggestionPos]);
+				for (int d = query.size(); d < logResults[suggestionPos].size(); ++d)
+					moveCurrentNode(current, logResults[suggestionPos][d]);
+				query = logResults[suggestionPos];
+				cursorPos = query.size();
+				setCursorToInputPosition(query.size());
 			}
 			c = _getch();
 			continue;
 		}
 		if (c == 8) { // c == backspace
-			if (!query.empty()) {
+			if (cursorPos > 0) {
 				cout << "\b \b";
-				query.pop_back();
+				if (cursorPos == query.size())
+					query.pop_back();
+				else
+					query.erase(query.begin() + cursorPos - 1);
+				setTextToSearchBox(query);
+				cursorPos--;
+				for (char d : query) {
+					d = tolower(d);
+					if (d != ' ')
+						moveCurrentNode(current, d);
+				}
 				current = history;
 				if (query.empty()) {
 					logResults.clear();
+					// Display most recent searches.
 					for (int i = max(0, logs.size() - MAXIMUM_HISTORY_CAPACITY); i < logs.size(); ++i)
 						logResults.push_back(logs[i]);
 					displayHistory(logResults);
 					setCursorToInputPosition(0);
 				}
 				else {
-					for (char& c : query)
-						if (c != ' ')
-							moveCurrentNode(current, c);
+					for (char d : query) {
+						d = tolower(d);
+						if (d != ' ')
+							moveCurrentNode(current, d);
+					}
+					logResults = getLogsFromQuery(current, history, logs);
+					displayHistory(logResults);
+					setCursorToInputPosition(cursorPos);
+				}
+			}
+			/*
+			if (!query.empty()) {
+				cout << "\b \b";
+				query.pop_back();
+				current = history;
+				if (query.empty()) {
+					logResults.clear();
+					// Display most recent searches.
+					for (int i = max(0, logs.size() - MAXIMUM_HISTORY_CAPACITY); i < logs.size(); ++i)
+						logResults.push_back(logs[i]);
+					displayHistory(logResults);
+					setCursorToInputPosition(0);
+				}
+				else {
+					for (char d : query) {
+						d = tolower(d);
+						if (d != ' ')
+							moveCurrentNode(current, d);
+					}
 					logResults = getLogsFromQuery(current, history, logs);
 					displayHistory(logResults);
 					setCursorToInputPosition((int)query.size());
 				}
 				cursorPos--;
 			}
+			*/
+			suggestionPos = -1;
 			c = _getch();
 			continue;
 		}
 		cout << c;
-		tolower(c);
 		if (cursorPos < query.size()) {
 			query[cursorPos] = c;
+			suggestionPos = -1;
 			current = history;
-			for (char& c : query)
-				if (c != ' ')
-					moveCurrentNode(current, c);
+			for (char d : query) {
+				d = tolower(d);
+				if (d != ' ')
+					moveCurrentNode(current, d);
+			}
 		}
 		else {
 			query += c;
+			suggestionPos = -1;
+			c = tolower(c);
 			if (c != ' ')
 				moveCurrentNode(current, c);
 		}
 		logResults = getLogsFromQuery(current, history, logs);
 		displayHistory(logResults);
-		setCursorToInputPosition((int)query.size());
 		cursorPos++;
+		setCursorToInputPosition(cursorPos);
 		c = _getch();
 	}
 	cout << "\n\n";
 	clearLog();
 
 	// Mark the new query as log.
-	logs.push_back(query);
-	current->isWord = logs.size() - 1;
-	addLog(query);
+	if (query != "exit") {
+		logs.push_back(query);
+		current->isWord = logs.size() - 1;
+		addLog(query);
+	}
+	stringlower(query);
 	setCursorToResultPosition();
 }
 

@@ -145,3 +145,9 @@ void stringlower(string& word) {
 	for (auto& c : word)
 		c = tolower(c);
 }
+
+// This function uppers all characters of a string.
+void stringupper(string& word) {
+	for (auto& c : word)
+		c = toupper(c);
+}
