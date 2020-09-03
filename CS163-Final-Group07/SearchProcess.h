@@ -13,4 +13,4 @@
 
 void search();
 void getQuery(string& query, Node*& history, vector<string>& logs);
-int filter(vector<string>& words, string& query);
+int filter(string& words);

@@ -34,75 +34,82 @@ void search() {
 	int oper = AND;
 
 	while (query != "exit") {
-		// Find operator and lower query to different words.
-		oper = filter(words, query);
-
-		// A list of all document lists containing each extracted word in query.
+		stringstream ss(query);
 		vector<vector<int>> allDocumentLists;
-		vector<vector<int>> negateDocumentLists;
-
-		// List of tokens that should be highlighted when printing results.
 		vector<string> tokens;
-
-		// Load each word in query and add corresponding document list.
-		// All query words will be added to tokens to highlight
-		// but only non-stopwords will be passed to allDocumentLists.
-		if (oper == NEGATE) {
-			bool negate = false;
-			for (auto& word : words) {
-				if (word == "-")
-					negate = true;
-				if (!extractWord(word))
-					continue;
-				bool stopword = isStopword(stopwordRoot, word);
-				vector<int> documentList = findDocumentList(root, word);
-				if (!documentList.empty()) {
-					if (!negate) {
-						tokens.push_back(word);
-						if (!stopword)
-							allDocumentLists.push_back(documentList);
-					}
-					else if (!stopword)
-						negateDocumentLists.push_back(documentList);
-				}
+		int isOp = 0;
+		int op = 0, cnt = 0;
+		vector<int> searchResult;
+		string word, sub;
+		// tom tat:
+		// moi lan dua vao 1 tu moi tu cu update documentList va searchResult
+		while (ss.good() || isOp) {
+			if (!isOp || word == "and" || word == "or") {
+				ss >> word;
+				stringlower(word);
+				op = filter(word);
 			}
-		}
-		else {
-			for (auto& word : words) {
-				if (!extractWord(word))
-					continue;
+			if (op) {
+				isOp = op;
+				op = 0;
+				continue;
+			}
+			if (!extractWord(word) || isStopword(stopwordRoot, word)) {
+				continue;
+			}
+
+			vector<int> documentList = findDocumentList(root, word);
+			if (!documentList.empty()) {
 				tokens.push_back(word);
-				if (isStopword(stopwordRoot, word))
-					continue;
-				vector<int> documentList = findDocumentList(root, word);
-				if (!documentList.empty())
-					allDocumentLists.push_back(documentList);
+				allDocumentLists.push_back(documentList);
+				searchResult = documentList;
 			}
+
+			if (isOp) {
+				switch (isOp) {
+				case 1:
+					searchResult = andRanking(allDocumentLists, cnt);
+					break;
+				case 2:
+					searchResult = negateRanking(allDocumentLists, cnt);
+					if (tokens.size() == 1)
+						tokens.clear();
+					break;
+				case 3:
+					bool use = false;
+					if (tokens.back() == word)
+						use = true;
+					searchResult = intitleRanking(root, stopwordRoot, tokens, allDocumentLists, word, use, ss);
+					break;
+				}
+
+
+				allDocumentLists.erase(allDocumentLists.begin());
+				--cnt;
+				isOp = 0;
+			}
+			else if (cnt > 0) {
+				searchResult = orRanking(allDocumentLists, cnt);
+				allDocumentLists.erase(allDocumentLists.begin());
+				--cnt;
+			}
+			++cnt;
 		}
 
-		// Process search operation.
-		switch (oper) {
-		case OR:
-			orOperator(allDocumentLists, tokens);
-			break;
-		case NEGATE:
-			negateOperator(allDocumentLists, negateDocumentLists, tokens);
-			break;
-		default:
-			andOperator(allDocumentLists, tokens);
+		// display result here
+		cout << "Top " << searchResult.size() << " results:\n\n";
+		for (int document : searchResult) {
+			if (tokens.size())
+				displayResult(document, tokens);
+			else
+				cout << document << ".txt" << "\n";
 		}
 
-		// Terminate this search results.
 		cin.get();
-		words.clear();
-		query.clear();
-
-		// Restart GUI.
 		system("cls");
 		drawTitle();
 		drawSearchBox();
-
-		// Get new query.
+		query.clear();
 		getQuery(query, history, logs);
 	}
 
@@ -275,22 +282,31 @@ void getQuery(string& query, Node*& history, vector<string>& logs) {
 
 // This function splits query into words (without extracting)
 // to produce a list of keywords and return the type of operator.
-int filter(vector<string>& words, string& query) {
-	stringstream queryStream(query);
-	string word;
-	int oper = AND; // Default operator
+int filter(string& word) {
+	stringlower(word);
+	string sub = word.substr(0, 8);
+	int oper = 0;
 
-	while (queryStream >> word) {
-		if (word == "or")
-			oper = OR;
-		else if (word[0] == '-') {
-			oper = NEGATE;
-			words.push_back("-");
-			if (words.size() != 1)
-				words.push_back(word.substr(1, word.size() - 1));
-			continue;
-		}
-		words.push_back(word);
+
+	if (word == "and") {
+		oper = 1;
+
+	}
+	else if (word[0] == '-') {
+		oper = 2;
+		word = word.substr(1, word.size() - 1);
+	}
+	else if (sub == "intitle:") {
+		word = word.substr(8, word.size() - 8);
+		oper = 3;
+	}
+	else if (sub == "filetype") {
+		oper = 4;
+		word = word.substr(9, word.size() - 9);
+	}
+	else if (word[0] == '"') {
+
+
 	}
 	return oper;
 }
