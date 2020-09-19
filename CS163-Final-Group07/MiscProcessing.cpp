@@ -7,6 +7,7 @@ Node* newNode() {
 	return node;
 }
 
+// This function traverse the current pointer to the next character's node.
 void moveCurrentNode(Node*& currentNode, char& c) {
 	if (currentNode->child.find(int(c)) == currentNode->child.end())
 		currentNode->child[int(c)] = newNode();
@@ -80,6 +81,24 @@ bool extractWord(string& word) {
 	return !word.empty();
 }
 
+// This function loads synonym.txt into a vector of vector of strings.
+// All synonyms of each other will be in the same vector.
+void loadSynonyms(vector<vector<string>>& synonyms) {
+	ifstream synonymFile(SYNONYM_FILE);
+	if (synonymFile) {
+		vector<string> synonym;
+		string line, word;
+		while (getline(synonymFile, line)) {
+			stringstream lineStream(line);
+			while (lineStream >> word)
+				synonym.push_back(word);
+			synonyms.push_back(synonym);
+			synonym.clear();
+		}
+		synonymFile.close();
+	}
+}
+
 // This function loads all stopwords into a trie.
 void loadStopwords(Node*& stopwordRoot) {
 	ifstream in("stopwords.txt");
@@ -132,6 +151,12 @@ bool isDocumentInList(vector<int>& documentList, int documentNum) {
 	if (index >= 0 && index < documentList.size() && documentList[index] == documentNum)
 		return true;
 	return false;
+}
+
+// This bool function is used to be a callback to sort the list of documents
+// in increasing order of different words it contains.
+bool sortIncreasingSecondElement(const pair<int, int>& a, const pair<int, int>& b) {
+	return a.second < b.second;
 }
 
 // This bool function is used to be a callback to sort the list of documents

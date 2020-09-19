@@ -146,6 +146,7 @@
     <ClInclude Include="SearchOperator.h" />
     <ClInclude Include="SearchProcess.h" />
     <ClInclude Include="SearchResult.h" />
+    <ClInclude Include="SearchSubroutine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="SearchOperator.cpp" />
     <ClCompile Include="SearchProcess.cpp" />
     <ClCompile Include="SearchResult.cpp" />
+    <ClCompile Include="SearchSubroutine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

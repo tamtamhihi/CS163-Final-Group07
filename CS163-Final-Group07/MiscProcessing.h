@@ -12,6 +12,7 @@ using namespace std;
 const int MAXIMUM_FILE = 12000;
 const int SEARCH_CAPACITY = 10;
 const string DOCUMENT_PREFIX = "ProjectData/";
+const string SYNONYM_FILE = "synonym.txt";
 
 // A node designed to be in a Trie structure.
 struct Node {
@@ -19,17 +20,18 @@ struct Node {
 	int isWord;
 	vector<int> documentList;
 };
-
 Node* newNode();
 void moveCurrentNode(Node*& currentNode, char& c);
 Node* addWordReturnFinal(string& word, Node*& root);
 void deleteTrie(Node*& root);
 bool isDigit(char& c);
 bool extractWord(string& word);
+void loadSynonyms(vector<vector<string>>& synonyms);
 void loadStopwords(Node*& stopwordRoot);
 bool isStopword(Node*& stopwordRoot, string& word);
 vector<int> findDocumentList(Node*& root, string& word);
 bool isDocumentInList(vector<int>& documentList, int documentNum);
+bool sortIncreasingSecondElement(const pair<int, int>& a, const pair<int, int>& b);
 bool sortDecreasingSecondElement(const pair<int, int>& a, const pair<int, int>& b);
 void stringlower(string& word);
 void stringupper(string& word);

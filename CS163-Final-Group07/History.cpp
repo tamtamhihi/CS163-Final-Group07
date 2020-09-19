@@ -1,6 +1,6 @@
 #include "History.h"
 
-// This function loads log file and is executed only once every running.
+// This function loads log file and is executed only once every running program.
 void loadHistory(Node*& root, vector<string>& logs) {
 	ifstream log("log.txt");
 	if (log) {
@@ -22,6 +22,8 @@ void loadHistory(Node*& root, vector<string>& logs) {
 	}
 }
 
+// This function digs deeper into the history Trie to find
+// suitable logs for a query.
 vector<string> getLogsFromQuery(Node*& currentNode, Node*& history, vector<string>& logs) {
 	vector<string> logResults;
 	stack<Node*> logStack;
@@ -41,6 +43,7 @@ vector<string> getLogsFromQuery(Node*& currentNode, Node*& history, vector<strin
 	return logResults;
 }
 
+// This function add query to log.txt.
 void addLog(string& query) {
 	ofstream log("log.txt", ios::app);
 	if (log) {
